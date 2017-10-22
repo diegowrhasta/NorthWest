@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:gravity="center_horizontal"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.diego.northwest.MainActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/et1"
+        android:hint="Numero de filas"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:id="@+id/et2"
+        android:layout_height="wrap_content"
+        android:hint="Numero de columnas"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="CreateMat"
+        android:id="@+id/bt1"
+        android:text="Crear Matriz"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:layout_gravity="center"
+        android:id="@+id/tv1"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/et3"
+        android:enabled="false"
+        android:hint="Ingrese el dato de la posicion respectiva"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bt2"
+        android:enabled="false"
+        android:onClick="setInput"
+        android:text="Ingresar Dato"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:layout_gravity="center"
+        android:id="@+id/tv2"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:id="@+id/et4"
+        android:hint="Ingrese el dato de la posicion respectiva"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bt3"
+        android:enabled="false"
+        android:onClick="setOutsiders"
+        android:text="Continuar"/>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showArray"
+        android:id="@+id/mosb"
+        android:enabled="false"
+        android:text="Mostrar Matriz"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:id="@+id/solb"
+        android:onClick="max"
+        android:text="Maximizar"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:id="@+id/solbb"
+        android:onClick="min"
+        android:text="Minimizar"/>
+    </LinearLayout>
+    </ScrollView>
+</LinearLayout>

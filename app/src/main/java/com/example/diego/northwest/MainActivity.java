@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
         assignValPos(sol, Zeta);
         //<--Hecha la matriz con los valores de las posiciones de soluciones-->
         //<--Hallando el minimo valor-->
-        int min = getMin(Zeta);
+        int min = getMinAsignados(sol,Zeta);
         Log.e("MinimoFil: ",""+min);
         //<--Encontrado el minimo valor-->
         //<--Calculos fila-col para hallar matriz completada
@@ -203,7 +203,6 @@ public class MainActivity extends AppCompatActivity {
         int colstinker[] = new int[m];
         filstinker[0] = min;
         //<--Encontradas filas y cols-->
-        getFilsCols(filstinker, colstinker, Zeta);
         aux="";
         getFilsCols(filstinker, colstinker, Zeta);
         for(int k=0;k<filstinker.length;k++)
@@ -254,7 +253,8 @@ public class MainActivity extends AppCompatActivity {
         //Hacer una matriz de objetos para facilitar el trabajo
         Posicion matel[][] = new Posicion[n][m];
         pasarMatel(matel, sol);
-
+           matel[posi][posj].setPivote(true);
+           Log.e("Pivote ",""+matel[posi][posj].isPivote()+" Posicion: "+posi+","+posj);
         //Finalizada la asginacion
         //Preparación de variables
         String logic = "Fila";
@@ -262,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
         int dinj = posj;
         int backi = 0, backj = 0;
         int tracker = 0;
-        boolean circuito = false, found = false, StageOne = true, StageTwo = false;
+        boolean circuito = false, found, StageOne = true, StageTwo = false;
         //Variables hechas
         while (!circuito) {
             found = false;
@@ -272,7 +272,8 @@ public class MainActivity extends AppCompatActivity {
                 tracker = 0;
                 if (logic.equals("Fila") && !found) {
                     for (int k = 0; k < m; k++) {
-                        if (matel[dini][k].getValor() > 0 && !matel[dini][k].isUsado() && !matel[dini][k].isTrash()) {
+                        if (matel[dini][k].getValor() > 0 && !matel[dini][k].isUsado() && !matel[dini][k].isTrash() && k!=dinj) {
+                            Log.e("Analizando:",""+matel[dini][k].getValor()+" Posicion: "+dini+","+k);
                             dinj = k;
                             matel[dini][k].setUsado(true);
                             logic = "Columna";
@@ -286,7 +287,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else if (logic.equals("Columna") && !found) {
                     for (int k = 0; k < n; k++) {
-                        if (matel[k][dinj].getValor() > 0 && !matel[k][dinj].isUsado() && !matel[k][dinj].isTrash()) {
+                        if (matel[k][dinj].getValor() > 0 && !matel[k][dinj].isUsado() && !matel[k][dinj].isTrash() && k!=dini) {
+                            Log.e("Analizando:",""+matel[k][dinj].getValor()+" Posicion: "+k+","+dinj);
                             matel[k][dinj].setUsado(true);
                             dini = k;
                             logic = "Columna";
@@ -305,27 +307,34 @@ public class MainActivity extends AppCompatActivity {
                         dini = posi;
                         dinj = posj;
                     }
+                    else
+                    {
+                        logic = "Fila";
+                        dini = posi;
+                        dinj = posj;
+                    }
+
                 }
             } else if (StageTwo) {
                 found = false;
+                boolean filyes=false,colyes=false;
                 if (logic.equals("Fila") && !found) {
                     for (int k = 0; k < m; k++) {
-                        if (dini == posi && k == posj) {
-                            circuito = true;
-                            found = true;
-                            break;
-                        }
-                        if (matel[dini][k].getValor() > 0 && !matel[dini][k].isUsado() && !matel[dini][k].isTrash()) {
+                        if (matel[dini][k].getValor() > 0 && !matel[dini][k].isUsado() && !matel[dini][k].isTrash() && k!=dinj && !found) {
+                            Log.e("Analizando:",""+matel[dini][k].getValor()+" Posicion: "+dini+","+k);
                             dinj = k;
                             matel[dini][k].setUsado(true);
+                            Log.e("Tracker",""+tracker);
                             logic = "Columna";
                             found = true;
                             if (tracker % 2 == 0)
                             {
+                                Log.e("Marca:","Negativo");
                                 matel[dini][k].setCrossedNeg(true);
                             }
                             else
                             {
+                                Log.e("Marca:","Positivo");
                                 matel[dini][k].setCrossedPos(true);
                             }
                             tracker++;
@@ -334,28 +343,51 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else if (logic.equals("Columna") && !found) {
                     for (int k = 0; k < n; k++) {
-                        if (k == posi && dinj == posj) {
-                            circuito = true;
-                            found = true;
-                            break;
-                        }
-                        if (matel[k][dinj].getValor() > 0 && !matel[k][dinj].isUsado() && !matel[k][dinj].isTrash()) {
+                        if (matel[k][dinj].getValor() > 0 && !matel[k][dinj].isUsado() && !matel[k][dinj].isTrash() && k!=dini && !found) {
+                            Log.e("Analizando:",""+matel[k][dinj].getValor()+" Posicion: "+k+","+dinj);
                             matel[k][dinj].setUsado(true);
                             dini = k;
                             logic = "Fila";
                             found = true;
+                            Log.e("Tracker",""+tracker);
                             if (tracker % 2 == 0)
                             {
+                                Log.e("Marca:","Negativo");
                                 matel[k][dinj].setCrossedNeg(true);
                             }
                             else
                             {
+                                Log.e("Marca:","Positivo");
                                 matel[k][dinj].setCrossedPos(true);
                             }
                             tracker++;
                             break;
                         }
                     }
+                }
+                for(int a=0;a<n;a++)
+                {
+                    if(matel[a][posj].isCrossedNeg())
+                    {
+                        filyes=true;
+                        Log.e("Anulador Col",""+matel[a][posj].getValor()+" Posicion "+a+","+posj);
+                        break;
+                    }
+                }
+                for(int a=0;a<m;a++)
+                {
+                    if(matel[posi][a].isCrossedNeg())
+                    {
+                        colyes=true;
+                        Log.e("Anulador Fil",""+matel[posi][a].getValor()+" Posicion "+posi+","+a);
+                        break;
+                    }
+                }
+                if(filyes && colyes)
+                {
+                    circuito=true;
+                    Log.e("Completado: ",""+circuito);
+                    break;
                 }
                 if (!found) {
                     StageOne = true;
@@ -370,6 +402,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                     matel[dini][dinj].setTrash(true);
+                    Log.e("Trash: ",""+matel[dini][dinj].getValor()+" Posicion: "+dini+","+dinj);
                 }
             }
         }
@@ -423,7 +456,7 @@ public class MainActivity extends AppCompatActivity {
         assignValPos(sol, Zeta);
         //<--Hecha la matriz con los valores de las posiciones de soluciones-->
         //<--Hallando el minimo valor-->
-           min = getMin(Zeta);
+           min = getMinAsignados(sol,Zeta);
            Log.e("MinimoFil: ",""+min);
         //<--Encontrado el minimo valor-->
         //<--Calculos fila-col para hallar matriz completada
@@ -503,7 +536,7 @@ public class MainActivity extends AppCompatActivity {
         assignValPos(sol, Zeta);
         //<--Hecha la matriz con los valores de las posiciones de soluciones-->
         //<--Hallando el minimo valor-->
-        int min = getMin(Zeta);
+        int min = getMinAsignados(sol,Zeta);
         Log.e("MinimoFil: ",""+min);
         //<--Encontrado el minimo valor-->
         //<--Calculos fila-col para hallar matriz completada
@@ -511,7 +544,6 @@ public class MainActivity extends AppCompatActivity {
         int colstinker[] = new int[m];
         filstinker[0] = min;
         //<--Encontradas filas y cols-->
-        getFilsCols(filstinker, colstinker, Zeta);
         aux="";
         getFilsCols(filstinker, colstinker, Zeta);
         for(int k=0;k<filstinker.length;k++)
@@ -558,10 +590,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             Log.e("Posicion posible val: ", "" + posi + "," + posj);
+
             //Hacer una matriz de objetos para facilitar el trabajo
             Posicion matel[][] = new Posicion[n][m];
             pasarMatel(matel, sol);
-
+            matel[posi][posj].setPivote(true);
+            Log.e("Pivote ",""+matel[posi][posj].isPivote()+" Posicion: "+posi+","+posj);
             //Finalizada la asginacion
             //Preparación de variables
             String logic = "Fila";
@@ -569,7 +603,7 @@ public class MainActivity extends AppCompatActivity {
             int dinj = posj;
             int backi = 0, backj = 0;
             int tracker = 0;
-            boolean circuito = false, found = false, StageOne = true, StageTwo = false;
+            boolean circuito = false, found, StageOne = true, StageTwo = false;
             //Variables hechas
             while (!circuito) {
                 found = false;
@@ -579,7 +613,8 @@ public class MainActivity extends AppCompatActivity {
                     tracker = 0;
                     if (logic.equals("Fila") && !found) {
                         for (int k = 0; k < m; k++) {
-                            if (matel[dini][k].getValor() > 0 && !matel[dini][k].isUsado() && !matel[dini][k].isTrash()) {
+                            if (matel[dini][k].getValor() > 0 && !matel[dini][k].isUsado() && !matel[dini][k].isTrash() && k!=dinj) {
+                                Log.e("Analizando:",""+matel[dini][k].getValor()+" Posicion: "+dini+","+k);
                                 dinj = k;
                                 matel[dini][k].setUsado(true);
                                 logic = "Columna";
@@ -593,7 +628,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     } else if (logic.equals("Columna") && !found) {
                         for (int k = 0; k < n; k++) {
-                            if (matel[k][dinj].getValor() > 0 && !matel[k][dinj].isUsado() && !matel[k][dinj].isTrash()) {
+                            if (matel[k][dinj].getValor() > 0 && !matel[k][dinj].isUsado() && !matel[k][dinj].isTrash() && k!=dini) {
+                                Log.e("Analizando:",""+matel[k][dinj].getValor()+" Posicion: "+k+","+dinj);
                                 matel[k][dinj].setUsado(true);
                                 dini = k;
                                 logic = "Columna";
@@ -612,27 +648,34 @@ public class MainActivity extends AppCompatActivity {
                             dini = posi;
                             dinj = posj;
                         }
+                        else
+                        {
+                            logic = "Fila";
+                            dini = posi;
+                            dinj = posj;
+                        }
+
                     }
                 } else if (StageTwo) {
                     found = false;
+                    boolean filyes=false,colyes=false;
                     if (logic.equals("Fila") && !found) {
                         for (int k = 0; k < m; k++) {
-                            if (dini == posi && k == posj) {
-                                circuito = true;
-                                found = true;
-                                break;
-                            }
-                            if (matel[dini][k].getValor() > 0 && !matel[dini][k].isUsado() && !matel[dini][k].isTrash()) {
+                            if (matel[dini][k].getValor() > 0 && !matel[dini][k].isUsado() && !matel[dini][k].isTrash() && k!=dinj && !found) {
+                                Log.e("Analizando:",""+matel[dini][k].getValor()+" Posicion: "+dini+","+k);
                                 dinj = k;
                                 matel[dini][k].setUsado(true);
+                                Log.e("Tracker",""+tracker);
                                 logic = "Columna";
                                 found = true;
                                 if (tracker % 2 == 0)
                                 {
+                                    Log.e("Marca:","Negativo");
                                     matel[dini][k].setCrossedNeg(true);
                                 }
                                 else
                                 {
+                                    Log.e("Marca:","Positivo");
                                     matel[dini][k].setCrossedPos(true);
                                 }
                                 tracker++;
@@ -641,28 +684,51 @@ public class MainActivity extends AppCompatActivity {
                         }
                     } else if (logic.equals("Columna") && !found) {
                         for (int k = 0; k < n; k++) {
-                            if (k == posi && dinj == posj) {
-                                circuito = true;
-                                found = true;
-                                break;
-                            }
-                            if (matel[k][dinj].getValor() > 0 && !matel[k][dinj].isUsado() && !matel[k][dinj].isTrash()) {
+                            if (matel[k][dinj].getValor() > 0 && !matel[k][dinj].isUsado() && !matel[k][dinj].isTrash() && k!=dini && !found) {
+                                Log.e("Analizando:",""+matel[k][dinj].getValor()+" Posicion: "+k+","+dinj);
                                 matel[k][dinj].setUsado(true);
                                 dini = k;
                                 logic = "Fila";
                                 found = true;
+                                Log.e("Tracker",""+tracker);
                                 if (tracker % 2 == 0)
                                 {
+                                    Log.e("Marca:","Negativo");
                                     matel[k][dinj].setCrossedNeg(true);
                                 }
                                 else
                                 {
+                                    Log.e("Marca:","Positivo");
                                     matel[k][dinj].setCrossedPos(true);
                                 }
                                 tracker++;
                                 break;
                             }
                         }
+                    }
+                    for(int a=0;a<n;a++)
+                    {
+                        if(matel[a][posj].isCrossedNeg())
+                        {
+                            filyes=true;
+                            Log.e("Anulador Col",""+matel[a][posj].getValor()+" Posicion "+a+","+posj);
+                            break;
+                        }
+                    }
+                    for(int a=0;a<m;a++)
+                    {
+                        if(matel[posi][a].isCrossedNeg())
+                        {
+                            colyes=true;
+                            Log.e("Anulador Fil",""+matel[posi][a].getValor()+" Posicion "+posi+","+a);
+                            break;
+                        }
+                    }
+                    if(filyes && colyes)
+                    {
+                        circuito=true;
+                        Log.e("Completado: ",""+circuito);
+                        break;
                     }
                     if (!found) {
                         StageOne = true;
@@ -677,6 +743,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                         matel[dini][dinj].setTrash(true);
+                        Log.e("Trash: ",""+matel[dini][dinj].getValor()+" Posicion: "+dini+","+dinj);
                     }
                 }
             }
@@ -730,7 +797,7 @@ public class MainActivity extends AppCompatActivity {
             assignValPos(sol, Zeta);
             //<--Hecha la matriz con los valores de las posiciones de soluciones-->
             //<--Hallando el minimo valor-->
-            min = getMin(Zeta);
+            min = getMinAsignados(sol,Zeta);
             Log.e("MinimoFil: ",""+min);
             //<--Encontrado el minimo valor-->
             //<--Calculos fila-col para hallar matriz completada
@@ -935,7 +1002,7 @@ public class MainActivity extends AppCompatActivity {
 
             for(int l=0;l<m;l++)
             {
-                matel[k][l]=new Posicion(sol[k][l],false,false,false);
+                matel[k][l]=new Posicion(sol[k][l],false,false,false,false);
 
             }
         }
@@ -949,7 +1016,7 @@ public class MainActivity extends AppCompatActivity {
             aux=aux+"\n";
             for(int l=0;l<m;l++)
             {
-                if(sol[k][l]>0)
+                if(sol[k][l]!=0)
                 {
                     Zeta[k][l]=mat[k][l];
                 }
@@ -957,6 +1024,28 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         Log.e("Asignados",""+aux);
+    }
+    public int getMinAsignados(int sol[][], int Zeta[][])
+    {
+        int min=0,c=0;
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                if(sol[i][j]!=0)
+                {
+                    if(c==0)
+                    {
+                        min=Zeta[i][j];
+                        c++;
+                    }
+                    else
+                    if(Zeta[i][j]<min)
+                        min=Zeta[i][j];
+                }
+            }
+        }
+        return min;
     }
     public void pasarExtremos(int org[],int copia[])
     {

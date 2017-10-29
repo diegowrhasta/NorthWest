@@ -9,6 +9,7 @@ public class Posicion {
     public boolean isCrossedPos=false;
     public boolean isCrossedNeg=false;
     public boolean usado=false;
+    public boolean pivote=false;
 
     public boolean isTrash() {
         return trash;
@@ -28,17 +29,26 @@ public class Posicion {
         this.usado = usado;
     }
 
-    public Posicion(int valor, boolean isCrossedPos, boolean isCrossedNeg, boolean usado) {
+    public Posicion(int valor, boolean isCrossedPos, boolean isCrossedNeg, boolean usado,boolean pivote) {
         this.valor = valor;
         this.isCrossedPos = isCrossedPos;
         this.isCrossedNeg = isCrossedNeg;
         this.usado=usado;
+        this.pivote=pivote;
+    }
 
+    public boolean isPivote() {
+        return pivote;
+    }
+
+    public void setPivote(boolean pivote) {
+        this.pivote = pivote;
     }
 
     public int getValor() {
 
         return valor;
+
     }
 
     public void setValor(int valor) {

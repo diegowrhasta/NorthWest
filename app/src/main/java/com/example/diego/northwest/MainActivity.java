@@ -165,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void max(View view) {
+        long startTime=System.nanoTime();
         String aux = "";
         int i = 0, j = 0;
         int sol[][] = new int[n][m];
@@ -237,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
         /*<--Revisar si se llego al optimo-->*/
 
        while(!isMaximized(condicional)) {
+
         int posi = 0, posj = 0;
         min = getMin(condicional);
         for (int k = 0; k < n; k++) {
@@ -265,6 +267,10 @@ public class MainActivity extends AppCompatActivity {
         boolean circuito = false, found, StageOne = true, StageTwo = false;
         //Variables hechas
         while (!circuito) {
+            long endTime = System.nanoTime();
+            double elapsedTime=(endTime-startTime)/1e9;
+            if(elapsedTime>4)
+                break;
             found = false;
             if (StageOne) {
                 dini = posi;
@@ -488,6 +494,10 @@ public class MainActivity extends AppCompatActivity {
         //<--Comparacion para pararla-->
         MatCond(condicional, Zeta);
         //<--Matriz lista para ser analizada-->
+           long endTime = System.nanoTime();
+           double elapsedTime=(endTime-startTime)/1e9;
+           if(elapsedTime>4)
+               break;
    }
         //<--Una vez llegado al optimo imprimir la solucion con la funcion maximizada-->
             aux = "";
@@ -506,6 +516,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void min(View view) {
+        long startTime=System.nanoTime();
         String aux = "";
         int i = 0, j = 0;
         int sol[][] = new int[n][m];
@@ -606,6 +617,10 @@ public class MainActivity extends AppCompatActivity {
             boolean circuito = false, found, StageOne = true, StageTwo = false;
             //Variables hechas
             while (!circuito) {
+                long endTime = System.nanoTime();
+                double elapsedTime=(endTime-startTime)/1e9;
+                if(elapsedTime>4)
+                    break;
                 found = false;
                 if (StageOne) {
                     dini = posi;
@@ -829,6 +844,10 @@ public class MainActivity extends AppCompatActivity {
             //<--Comparacion para pararla-->
             MatCond(condicional, Zeta);
             //<--Matriz lista para ser analizada-->
+            long endTime = System.nanoTime();
+            double elapsedTime=(endTime-startTime)/1e9;
+            if(elapsedTime>4)
+                break;
         }
         //<--Una vez llegado al optimo imprimir la solucion con la funcion maximizada-->
         aux = "";

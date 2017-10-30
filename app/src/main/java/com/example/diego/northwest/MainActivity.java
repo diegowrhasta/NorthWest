@@ -862,7 +862,7 @@ public class MainActivity extends AppCompatActivity {
         dialogo.setTextSize(20);
         dialogo.setText(aux);
         dialog.show();
-        Toast.makeText(this, "Maximo: " + funcion, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Minimo: " + funcion, Toast.LENGTH_SHORT).show();
     }
 
 
